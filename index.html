@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Placar</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+  padding: 15px;
+}
+
+/* PLACAR */
+.scoreboard {
+  display: flex;
+  gap: 60px;
+  background: rgba(0,0,0,0.4);
+  padding: 40px 60px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* TIME */
+.team {
+  text-align: center;
+  flex: 1 1 250px;
+}
+
+.team-name {
+  font-size: clamp(20px, 3vw, 28px);
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+}
+
+.score-container {
+  perspective: 1000px;
+}
+
+/* NÚMERO RESPONSIVO */
+.score {
+  font-size: clamp(60px, 15vw, 100px);
+  font-weight: bold;
+  background: #111;
+  padding: 20px 50px;
+  border-radius: 15px;
+  display: inline-block;
+  min-width: 120px;
+  box-shadow: inset 0 -8px 0 rgba(255,255,255,0.05);
+  transition: transform 0.3s;
+}
+
+.flip {
+  animation: flip 0.4s ease;
+}
+
+@keyframes flip {
+  0% { transform: rotateX(0deg); }
+  50% { transform: rotateX(90deg); }
+  100% { transform: rotateX(0deg); }
+}
+
+/* BOTÕES */
+.buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 12px 22px;
+  font-size: clamp(16px, 2.5vw, 18px);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+  background: #00c6ff;
+  color: white;
+  font-weight: bold;
+}
+
+button:hover {
+  transform: scale(1.1);
+  background: #0072ff;
+}
+
+/* RESET */
+.reset {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.reset button {
+  background: #ff4b2b;
+}
+
+.reset button:hover {
+  background: #ff1c00;
+}
+
+/* 🔄 AJUSTE ESPECÍFICO PARA CELULAR DEITADO */
+@media (orientation: landscape) and (max-height: 500px) {
+
+  body {
+    padding: 10px;
+  }
+
+  .scoreboard {
+    width: 100%;
+    height: 79vh;
+    padding: 20px 30px;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  .team-name {
+    font-size: 5vh;
+  }
+
+  .score {
+    font-size: 18vh;
+    padding: 40px 65px;
+  }
+
+  button {
+    padding: 12px 24px;
+    font-size: 4vh;
+  }
+
+  .reset {
+    margin-top: 15px;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<div class="scoreboard">
+  <div class="team">
+    <div class="team-name">TIME A</div>
+    <div class="score-container">
+      <div class="score" id="scoreA">0</div>
+    </div>
+    <div class="buttons">
+      <button onclick="changeScore('A', 1)">+</button>
+      <button onclick="changeScore('A', -1)">−</button>
+    </div>
+  </div>
+
+  <div class="team">
+    <div class="team-name">TIME B</div>
+    <div class="score-container">
+      <div class="score" id="scoreB">0</div>
+    </div>
+    <div class="buttons">
+      <button onclick="changeScore('B', 1)">+</button>
+      <button onclick="changeScore('B', -1)">−</button>
+    </div>
+  </div>
+</div>
+
+<div class="reset">
+  <button onclick="resetScore()">Resetar Placar</button>
+</div>
+
+<script>
+let scoreA = 0;
+let scoreB = 0;
+
+function changeScore(team, value) {
+  if (team === 'A') {
+    scoreA = Math.max(0, scoreA + value);
+    updateDisplay('scoreA', scoreA);
+  } else {
+    scoreB = Math.max(0, scoreB + value);
+    updateDisplay('scoreB', scoreB);
+  }
+}
+
+function updateDisplay(id, value) {
+  const element = document.getElementById(id);
+  element.classList.add('flip');
+  
+  setTimeout(() => {
+    element.textContent = value;
+  }, 200);
+
+  setTimeout(() => {
+    element.classList.remove('flip');
+  }, 400);
+}
+
+function resetScore() {
+  scoreA = 0;
+  scoreB = 0;
+  updateDisplay('scoreA', scoreA);
+  updateDisplay('scoreB', scoreB);
+}
+</script>
+
+</body>
+</html>
